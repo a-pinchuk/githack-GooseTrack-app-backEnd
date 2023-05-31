@@ -27,7 +27,7 @@ const register = async (req, res) => {
   await wrappedSendMail({
     to: email,
     subject: 'Please confirm your email',
-    html: `<a href="http://localhost:3000/api/users/verify/${verificationToken}">Confirm your email</a>`,
+    html: `<a href="https://githack-goosetrack.onrender.com/api/users/verify/${verificationToken}">Confirm your email</a>`,
   });
   res.status(201).json({
     email: newUser.email,
