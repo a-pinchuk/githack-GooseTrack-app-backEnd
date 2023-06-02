@@ -35,7 +35,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrentUserInfo"
+                  "$ref": "#/components/schemas/CurrentUserResponse"
                 }
               }
             }
@@ -140,24 +140,56 @@
           }
         }
       }
+    },
+    "/api/users/user": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "User updateInfo",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "UserUpdate's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "CurrentUserInfo": {
+      "CurrentUserResponse": {
         "type": "object",
 
         "properties": {
-          "email": {
+          "token": {
             "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "subscription": {
-            "type": "string",
-            "description": "User's subscription",
-            "example": "pro"
+            "description": "User's token"
           }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzliYThiYjMwOWQ4ZmJiZDA0NWRlOSIsImlhdCI6MTY4NTcwMzQyMCwiZXhwIjoxNjg1Nzg2MjIwfQ.QRWRzG0JpnCy5NjkvEi2sOnR82"
         }
       },
       "RegistrationResponse": {
@@ -175,41 +207,118 @@
         "example": { "email": "user@gmail.com" }
       },
       "RegistrationRequest": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "password": {
-              "type": "string",
-              "description": "User's password",
-              "format": "password"
-            }
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "format": "password",
+            "minLength": 6
           }
         },
-        "example": { "email": "user@gmail.com", "password": "qwerty123" }
+        "required": ["name", "email", "password"],
+        "example": { "name": "Andrew", "email": "user@gmail.com", "password": "qwerty123" }
       },
-      "LoginRequest": {
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone"
+          },
+          "skype": {
+            "type": "string",
+            "description": "User's skype"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "User's birthday"
+          }
+        },
+        "required": ["name", "email"],
+        "example": {
+          "name": "Andrew",
+          "email": "user@gmail.com",
+          "skype": "apinchuk",
+          "phone": "38 (073) 000 00 00",
+          "birthday": "28/03/2000"
+        }
+      },
+      "UpdateUserResponse": {
         "type": "object",
         "items": {
           "type": "object",
           "properties": {
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
             "email": {
               "type": "string",
               "description": "User's email",
               "format": "email"
             },
-            "password": {
+            "phone": {
               "type": "string",
-              "description": "User's password",
-              "example": "qwerty123"
+              "description": "User's phone"
+            },
+            "skype": {
+              "type": "string",
+              "description": "User's skype"
+            },
+            "birthday": {
+              "type": "string",
+              "description": "User's birthday"
             }
           }
         },
+        "example": {
+          "message": "UserInfo updated",
+          "user": {
+            "skype": "apinchuk",
+            "birthday": "28/03/2000",
+            "_id": "6479dbb972171cebb39e9dc0",
+            "name": "Andrew",
+            "email": "user@gmail.com",
+            "avatarUrl": "//www.gravatar.com/avatar/2f1186e45bf2f3c8c6638ad88e55e056",
+            "verify": true,
+            "phone": "38 (033) 777 77 77"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        },
+        "required": ["email", "password"],
         "example": { "email": "user@gmail.com", "password": "qwerty123" }
       },
       "LoginResponse": {
