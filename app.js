@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 const dotenv = require("dotenv");
 
 const usersRouter = require("./routes/api/auth");
@@ -17,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", usersRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/tasks", tasksRouter);
 
 app.use((req, res) => {
@@ -24,7 +27,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status).json({ message: err.message });
+  res.status(err.status || 500).json({ message: err.message });
 });
 
 module.exports = app;

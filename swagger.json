@@ -1,0 +1,363 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Githack Swagger API",
+    "description": "Showing off swagger-ui-express",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    { "url": "https://githack-goosetrack.onrender.com" },
+    { "url": "http://localhost:3000" }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    }
+  ],
+  "paths": {
+    "/api/users/current": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (provide valid token)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password invalid",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (provide valid token)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/user": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "User updateInfo",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "UserUpdate's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CurrentUserResponse": {
+        "type": "object",
+
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token"
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzliYThiYjMwOWQ4ZmJiZDA0NWRlOSIsImlhdCI6MTY4NTcwMzQyMCwiZXhwIjoxNjg1Nzg2MjIwfQ.QRWRzG0JpnCy5NjkvEi2sOnR82"
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            }
+          }
+        },
+        "example": { "email": "user@gmail.com" }
+      },
+      "RegistrationRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "format": "password",
+            "minLength": 6
+          }
+        },
+        "required": ["name", "email", "password"],
+        "example": { "name": "Andrew", "email": "user@gmail.com", "password": "qwerty123" }
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone"
+          },
+          "skype": {
+            "type": "string",
+            "description": "User's skype"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "User's birthday"
+          }
+        },
+        "required": ["name", "email"],
+        "example": {
+          "name": "Andrew",
+          "email": "user@gmail.com",
+          "skype": "apinchuk",
+          "phone": "38 (073) 000 00 00",
+          "birthday": "28/03/2000"
+        }
+      },
+      "UpdateUserResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string",
+              "description": "User's phone"
+            },
+            "skype": {
+              "type": "string",
+              "description": "User's skype"
+            },
+            "birthday": {
+              "type": "string",
+              "description": "User's birthday"
+            }
+          }
+        },
+        "example": {
+          "message": "UserInfo updated",
+          "user": {
+            "skype": "apinchuk",
+            "birthday": "28/03/2000",
+            "_id": "6479dbb972171cebb39e9dc0",
+            "name": "Andrew",
+            "email": "user@gmail.com",
+            "avatarUrl": "//www.gravatar.com/avatar/2f1186e45bf2f3c8c6638ad88e55e056",
+            "verify": true,
+            "phone": "38 (033) 777 77 77"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        },
+        "required": ["email", "password"],
+        "example": { "email": "user@gmail.com", "password": "qwerty123" }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "User's token"
+            }
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzliYThiYjMwOWQ4ZmJiZDA0NWRlOSIsImlhdCI6MTY4NTcwMzQyMCwiZXhwIjoxNjg1Nzg2MjIwfQ.QRWRzG0JpnCy5NjkvEi2sOnR82"
+        }
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "message"
+            }
+          }
+        },
+        "example": {
+          "message": "Successful logout"
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

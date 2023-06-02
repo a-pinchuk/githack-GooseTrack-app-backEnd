@@ -1,5 +1,5 @@
 const { User } = require('../../models');
-const { HttpError, wrappedSendMail } = require('../../helpers');
+const { HttpError } = require('../../helpers');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 const { v4 } = require('uuid');
@@ -24,14 +24,13 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  await wrappedSendMail({
-    to: email,
-    subject: 'Please confirm your email',
-    html: `<a href="https://githack-goosetrack.onrender.com/api/users/verify/${verificationToken}">Confirm your email</a>`,
-  });
+  // await wrappedSendMail({
+  //   to: email,
+  //   subject: 'Please confirm your email',
+  //   html: `<a href="https://githack-goosetrack.onrender.com/api/users/verify/${verificationToken}">Confirm your email</a>`,
+  // });
   res.status(201).json({
     email: newUser.email,
-    subscription: newUser.subscription,
   });
 };
 

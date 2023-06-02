@@ -1,12 +1,12 @@
 const express = require("express");
-const { validateBody, auth, isValidId } = require("../../middlewares");
+const { validateBody, isValidId } = require("../../middlewares");
 const { schemas } = require("../../models/task");
 
 const ctrl = require("../../controllers/tasks");
 
 const router = express.Router();
 
-//TODO  add auth
+// TODO  add auth
 
 // * Get tasks
 // router.get("/", auth, ctrl.getTasks);
