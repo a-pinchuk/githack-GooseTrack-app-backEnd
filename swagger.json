@@ -1,0 +1,254 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Githack Swagger API",
+    "description": "Showing off swagger-ui-express",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    { "url": "https://githack-goosetrack.onrender.com" },
+    { "url": "http://localhost:3000" }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    }
+  ],
+  "paths": {
+    "/api/users/current": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserInfo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (provide valid token)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password invalid",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (provide valid token)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CurrentUserInfo": {
+        "type": "object",
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "subscription": {
+            "type": "string",
+            "description": "User's subscription",
+            "example": "pro"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            }
+          }
+        },
+        "example": { "email": "user@gmail.com" }
+      },
+      "RegistrationRequest": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "format": "password"
+            }
+          }
+        },
+        "example": { "email": "user@gmail.com", "password": "qwerty123" }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "example": "qwerty123"
+            }
+          }
+        },
+        "example": { "email": "user@gmail.com", "password": "qwerty123" }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "User's token"
+            }
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzliYThiYjMwOWQ4ZmJiZDA0NWRlOSIsImlhdCI6MTY4NTcwMzQyMCwiZXhwIjoxNjg1Nzg2MjIwfQ.QRWRzG0JpnCy5NjkvEi2sOnR82"
+        }
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "message"
+            }
+          }
+        },
+        "example": {
+          "message": "Successful logout"
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
