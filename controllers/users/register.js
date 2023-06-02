@@ -6,6 +6,7 @@ const { v4 } = require('uuid');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
+  console.log('🚀 ~ в register email:', email);
   const user = await User.findOne({ email });
   const avatarUrl = gravatar.url(email);
 

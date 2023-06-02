@@ -1,9 +1,8 @@
 const currentUser = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { token } = req.user;
 
   res.status(200).json({
-    email,
-    subscription,
+    token,
   });
 };
 
