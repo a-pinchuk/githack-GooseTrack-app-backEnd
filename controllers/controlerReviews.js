@@ -1,50 +1,50 @@
 const expressAsyncHandler = require("express-async-handler");
 
 class ControlerReviews {
-  getRevies(req, res) {
+  getReviews(req, res) {
     return expressAsyncHandler(async (req, res) => {
       // const goods = await goodsServices.show({ ...req.query });
-      console.log("getRevies");
+      console.log("getReviews");
       const reviews = [];
 
       res.status(200).json({ code: 200, data: reviews, qty: reviews.length });
     });
   }
 
-  getRevieById(req, res) {
+  getReviewById(req, res) {
     return expressAsyncHandler(async (req, res) => {
       // const goods = await goodsServices.show({ ...req.query });
-      console.log("getRevieById");
+      console.log("getReviewById");
       const review = [];
 
       res.status(200).json({ code: 200, data: review });
     });
   }
 
-  addRevie(req, res) {
+  addReview(req, res) {
     return expressAsyncHandler(async (req, res) => {
       // const goods = await goodsServices.show({ ...req.query });
-      console.log("addRevie");
+      console.log("addReview");
       const review = [];
 
       res.status(200).json({ code: 200, data: review });
     });
   }
 
-  changeRevie(req, res) {
+  changeReview(req, res) {
     return expressAsyncHandler(async (req, res) => {
       // const goods = await goodsServices.show({ ...req.query });
-      console.log("changeRevie");
+      console.log("changeReview");
       const review = [];
 
       res.status(200).json({ code: 200, data: review });
     });
   }
 
-  deleteRevie(req, res) {
+  deleteReview(req, res) {
     return expressAsyncHandler(async (req, res) => {
       // const goods = await goodsServices.show({ ...req.query });
-      console.log("deleteRevie");
+      console.log("deleteReview");
       const review = [];
 
       res.status(200).json({ code: 200, data: review });

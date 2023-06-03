@@ -6,17 +6,17 @@ const ctrl = require("../../controllers/tasks");
 
 const router = express.Router();
 
-router.get("/", auth, ctrl.getRevies);
-router.get("/:id", auth, isValidId, ctrl.getRevieById);
-router.post("/", auth, validateBody(schemas.schemaAddReview), ctrl.addRevie);
+router.get("/", auth, ctrl.getReviews);
+router.get("/:id", auth, isValidId, ctrl.getReviewById);
+router.post("/", auth, validateBody(schemas.schemaAddReview), ctrl.addReview);
 router.put(
   "/:id",
   auth,
   isValidId,
   validateBody(schemas.schemaAddReview),
-  ctrl.changeRevie
+  ctrl.changeReview
 );
 
-router.delete("/:id", auth, isValidId, ctrl.deleteRevie);
+router.delete("/:id", auth, isValidId, ctrl.deleteReview);
 
 module.exports = router;
