@@ -6,6 +6,7 @@ const serviceChangeTasks = async (id, data) => {
   const task = await modelTask.findByIdAndUpdate(id, data, {
     new: true,
     // runValidators: true,
+    select: "-createdAt -updatedAt -__v",
   });
 
   if (!task) {

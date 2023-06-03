@@ -3,14 +3,11 @@ const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
 const regexpData =
-  /^(?!0000)(?!00)[-+]?\d{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-30|(?:0[13578]|1[02])-31)$/;
+  /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
 const regexpTime = /^([01]\d|2[0-3]):[0-5]\d$/;
 const typeCategory = ["to-do", "in-progress", "done"];
 const typePriority = ["low", "medium", "high"];
 
-// TODO Додати складнішу валідацію,
-// на довжину поля для дати і часу початку кіня
-// і Пріоритет, категорія також провалідувати по вказаним значенням
 const taskSchema = new Schema(
   {
     title: {

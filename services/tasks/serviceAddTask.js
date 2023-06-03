@@ -1,5 +1,4 @@
 const { modelTask } = require("../../models/task");
-
 const { HttpError } = require("../../helpers");
 
 const serviceAddTasks = async (data) => {
@@ -8,8 +7,9 @@ const serviceAddTasks = async (data) => {
   if (!tasks) {
     throw HttpError(400, "Unable to save in DataBase");
   }
+  const { createdAt, updatedAt, __v, ...createdTask } = tasks.toObject();
 
-  return tasks;
+  return createdTask;
 };
 
 module.exports = serviceAddTasks;

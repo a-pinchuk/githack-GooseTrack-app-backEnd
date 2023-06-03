@@ -2,8 +2,11 @@ const { modelTask } = require("../../models/task");
 
 const { HttpError } = require("../../helpers");
 
-const serviceGetTasks = async () => {
-  const tasks = await modelTask.find({});
+const serviceGetTasks = async (filter) => {
+  const tasks = await modelTask.find(
+    { date: { $regex: filter, $options: "i" } },
+    "-createdAt -updatedAt -__v"
+  );
 
   if (!tasks) {
     throw HttpError(400, "Unable to fetch Tasks");

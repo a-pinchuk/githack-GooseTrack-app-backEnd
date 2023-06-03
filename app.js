@@ -8,6 +8,8 @@ const dotenv = require("dotenv");
 const usersRouter = require("./routes/api/auth");
 const tasksRouter = require("./routes/api/tasks");
 const reviesRouter = require("./routes/api/reviews");
+// TODO delete
+const testDataRoutes = require("./routes/api/testData");
 
 dotenv.config();
 const app = express();
@@ -23,6 +25,8 @@ app.use("/api/users", usersRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/tasks", tasksRouter);
 app.use("/api/revies", reviesRouter);
+// TODO delete
+app.use("/api/test_data", testDataRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
