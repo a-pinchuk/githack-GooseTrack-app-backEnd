@@ -72,6 +72,7 @@ const updateUserSchema = Joi.object({
   skype: Joi.string().optional(),
   email: Joi.string().pattern(emailRegexp).required(),
   birthday: Joi.string().pattern(dateRegexp).optional(),
+  avatar: Joi.any().optional(),
 });
 
 const emailSchema = Joi.object({
