@@ -15,10 +15,11 @@ router.post(
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 router.post("/logout", auth, ctrl.logout);
-router.patch("/avatar", auth, uploadCloud.single("avatar"), ctrl.updateAvatar);
+// router.patch("/avatar", auth, uploadCloud.single("avatar"), ctrl.updateAvatar);
 router.patch(
   "/user",
   auth,
+  uploadCloud.single("avatar"),
   validateBody(schemas.updateUserSchema),
   ctrl.updateUser
 );

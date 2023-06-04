@@ -13,7 +13,7 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     password: {
       type: String,
@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [false, "Email is required"],
       match: emailRegexp,
       unique: true,
     },
