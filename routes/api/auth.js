@@ -12,6 +12,12 @@ router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
 router.post('/logout', auth, ctrl.logout);
 router.patch('/avatars', auth, upload.single('avatar'), ctrl.updateAvatar);
-router.patch('/user', auth, validateBody(schemas.updateUserSchema), ctrl.updateUser);
+router.patch(
+  '/user',
+  auth,
+  upload.single('avatar'),
+  validateBody(schemas.updateUserSchema),
+  ctrl.updateUser
+);
 
 module.exports = router;
