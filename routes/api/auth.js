@@ -5,6 +5,7 @@ const ctrl = require("../../controllers/users");
 
 const router = express.Router();
 
+
 router.get("/current", auth, ctrl.currentUser);
 router.get("/verify/:verificationToken", ctrl.verifyEmail);
 router.post(

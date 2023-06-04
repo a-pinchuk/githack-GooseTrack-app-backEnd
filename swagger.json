@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "2.0.2",
+    "version": "2.0.3",
     "title": "Githack Swagger API",
     "description": "Showing off swagger-ui-express",
     "license": {
@@ -19,6 +19,14 @@
     {
       "name": "Auth",
       "description": "Authorization endpoints"
+    },
+    {
+      "name": "Tasks",
+      "description": "Tasks endpoints"
+    },
+    {
+      "name": "Reviews",
+      "description": "Reviews endpoints"
     }
   ],
   "paths": {
@@ -171,6 +179,443 @@
           },
           "404": {
             "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "day",
+            "required": false,
+            "type": "string",
+            "description": "The date on which to return the tasks. Format: YYYY-MM-DD"
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "type": "string",
+            "description": "Any date of the month for which tasks must be returned. Format: YYYY-MM-DD"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTasksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to fetch Tasks",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create task",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to save in DataBase",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/tasks/:id": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get task by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Task id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Task",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Change tasks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Task id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Task",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Task id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Task",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/tasks/:id/category": {
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Change Category Task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Task id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchCategoryTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Task",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get all reviews",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": "integer",
+            "description": "Number page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer",
+            "description": "Count reviews in response"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllReviewsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to fetch Tasks",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reviews"],
+        "summary": "Create review",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to save in DataBase",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/reviews/:id": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get reviews by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Reviews id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Review",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["Reviews"],
+        "summary": "Change review",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Review id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Review's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Review",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reviews"],
+        "summary": "Review task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Review id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to find Review",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           }
         }
@@ -353,6 +798,281 @@
         },
         "example": {
           "message": "Successful logout"
+        }
+      },
+      "GetTasksResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Code operation",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewTask"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "description": "Count found tasks",
+            "example": 2
+          }
+        }
+      },
+      "CreateTaskRequest": {
+        "type": "object",
+        "required": ["title", "date", "start", "end", "priority", "category"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title task",
+            "example": "My task 1"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date task. Format YYYY-MM-DD",
+            "example": "2023-06-09"
+          },
+          "start": {
+            "type": "string",
+            "description": "Time start task. Format HH:MM",
+            "example": "09:05"
+          },
+          "end": {
+            "type": "string",
+            "description": "Time end task. Format HH:MM. start < end",
+            "example": "09:15"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Priority task. One of the listed options: low | medium | high ",
+            "example": "medium"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category task. One of the listed options: to-do | in-progress | done ",
+            "example": "in-progress"
+          }
+        }
+      },
+      "CreateTaskResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Code operation",
+            "example": 201
+          },
+          "data": {
+            "$ref": "#/components/schemas/NewTask"
+          }
+        }
+      },
+      "GetDeletePatchTaskResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Code operation",
+            "example": 200
+          },
+          "data": {
+            "$ref": "#/components/schemas/NewTask"
+          }
+        }
+      },
+
+      "NewTask": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id task",
+            "example": "647c3368bb02a06a896ea358"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title task",
+            "example": "My task 1"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date task. Format YYYY-MM-DD",
+            "example": "2023-06-09"
+          },
+          "start": {
+            "type": "string",
+            "description": "Time start task. Format HH:MM",
+            "example": "09:05"
+          },
+          "end": {
+            "type": "string",
+            "description": "Time end task. Format HH:MM. start < end",
+            "example": "09:15"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Priority task. One of the listed options: low | medium | high ",
+            "example": "medium"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category task. One of the listed options: to-do | in-progress | done ",
+            "example": "in-progress"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Id user ",
+            "example": "647c3368bb02a06a896ea358"
+          }
+        }
+      },
+      "PatchCategoryTaskRequest": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category task. One of the listed options: to-do | in-progress | done ",
+            "example": "in-progress"
+          }
+        }
+      },
+      "OwnerReview": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id owner",
+            "example": "647c3368bb02a06a896ea358"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name owner",
+            "example": "Olja"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Name owner",
+            "example": "https://www.gravatar.com/avatar/316b7fc8b16defe7864b246a0fc25736"
+          }
+        }
+      },
+      "ReviewResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Code operation",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Id review",
+                "example": "647c3368bb02a06a896ea358"
+              },
+              "owner": { "$ref": "#/components/schemas/OwnerReview" },
+              "rating": {
+                "type": "integer",
+                "description": "Rating review, rating from 0 to 5",
+                "example": 2
+              },
+              "comment": {
+                "type": "string",
+                "description": "Text review",
+                "example": "This text of review"
+              }
+            }
+          }
+        }
+      },
+      "DeleteReviewResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Code operation",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Id review",
+                "example": "647c3368bb02a06a896ea358"
+              },
+              "owner": {
+                "type": "string",
+                "description": "Id owner",
+                "example": "647c3368bb02a06a896ea358"
+              },
+              "rating": {
+                "type": "integer",
+                "description": "Rating review, rating from 0 to 5",
+                "example": 2
+              },
+              "comment": {
+                "type": "string",
+                "description": "Text review",
+                "example": "This text of review"
+              }
+            }
+          }
+        }
+      },
+      "GetAllReviewsResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Code operation",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Id review",
+                  "example": "647c3368bb02a06a896ea358"
+                },
+                "owner": { "$ref": "#/components/schemas/OwnerReview" },
+                "rating": {
+                  "type": "integer",
+                  "description": "Rating review, rating from 0 to 5",
+                  "example": 2
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "Text review",
+                  "example": "This text of review"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateReviewRequest": {
+        "type": "object",
+        "required": ["rating", "comment"],
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "description": "Rating review, rating from 0 to 5",
+            "example": 2
+          },
+          "comment": {
+            "type": "string",
+            "description": "Text review",
+            "example": "This text of review"
+          }
         }
       }
     },
