@@ -226,7 +226,11 @@
           }
         },
         "required": ["name", "email", "password"],
-        "example": { "name": "Andrew", "email": "user@gmail.com", "password": "qwerty123" }
+        "example": {
+          "name": "Andrew",
+          "email": "user@gmail.com",
+          "password": "qwerty123"
+        }
       },
       "UpdateUserRequest": {
         "type": "object",

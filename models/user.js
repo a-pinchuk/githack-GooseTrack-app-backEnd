@@ -1,9 +1,12 @@
-const { Schema, model } = require('mongoose');
-const { handleMongooseError } = require('../helpers');
-const Joi = require('joi');
+const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const dateRegexp = /^(?:(?:0[1-9]|[12][0-9]|3[01])\/(?:0[1-9]|1[0-2])\/(?:19|20)\d\d)?$/;
+// const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegexp =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const dateRegexp =
+  /^(?:(?:0[1-9]|[12][0-9]|3[01])\/(?:0[1-9]|1[0-2])\/(?:19|20)\d\d)?$/;
 const phoneRegexp = /^38\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}$/;
 
 const userSchema = new Schema(
@@ -14,11 +17,11 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [true, "Password is required"],
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       match: emailRegexp,
       unique: true,
     },
@@ -48,13 +51,13 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post('save', handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
@@ -85,7 +88,7 @@ const schemas = {
   updateUserSchema,
 };
 
-const User = model('user', userSchema);
+const User = model("user", userSchema);
 
 module.exports = {
   User,

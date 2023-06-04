@@ -1,32 +1,34 @@
-const path = require('path');
-const { User } = require('../../models');
-const { HttpError } = require('../../helpers');
-const Jimp = require('jimp');
+// const { User } = require("../../models");
 
-const updateAvatar = async (req, res, next) => {
-  const { filename } = req.file;
-  const { _id } = req.user;
-  const newFileName = `${_id}_${filename}`;
+const updateAvatar = async (req, res) => {
+  console.log("req.file.path :", req.file.path);
 
-  if (!filename) {
-    throw HttpError(400, 'File is require!');
-  }
+  // const owner = req.user.id;
+  // const petData = req.body;
+  // const data = !req.file
+  //   ? { avatarURL: req.file.path, owner, ...petData }
+  //   : { owner, ...petData };
+  const avatarURL = req.file.path;
 
-  const tmpPath = path.resolve(__dirname, '../../tmp', filename);
-  const avatarsDir = path.resolve(__dirname, '../../public/avatars', newFileName);
+  // Pet.create(data)
+  //   .then((pet) => {
+  //     if (pet) {
+  //       User.findByIdAndUpdate(owner, { $push: { userPets: pet._id } })
+  //         .then((user) => {
+  //           if (user) {
+  //             res.status(201).json({ success: true, pet });
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           throw new Error(err);
+  //         });
+  //     }
+  //   })
+  //   .catch((err) =>
+  //     res.status(400).json({ success: false, error: err, message: err.message })
+  //   );
 
-  const image = await Jimp.read(tmpPath);
-  await image
-    .resize(250, 250) // resize
-    .quality(60) // set JPEG quality
-    .writeAsync(avatarsDir); // save;
-
-  const avatarUrl = path.join('avatars', newFileName);
-  await User.findByIdAndUpdate(_id, { avatarUrl });
-
-  res.json({
-    avatarUrl,
-  });
+  res.json(avatarURL);
 };
 
 module.exports = updateAvatar;
