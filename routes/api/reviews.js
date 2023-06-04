@@ -2,7 +2,7 @@ const express = require("express");
 const { validateBody, isValidId, auth } = require("../../middlewares");
 const { schemas } = require("../../models/review");
 
-const ctrl = require("../../controllers/tasks");
+const ctrl = require("../../controllers/controlerReviews");
 
 const router = express.Router();
 
@@ -16,7 +16,6 @@ router.put(
   validateBody(schemas.schemaAddReview),
   ctrl.changeReview
 );
-
 router.delete("/:id", auth, isValidId, ctrl.deleteReview);
 
 module.exports = router;

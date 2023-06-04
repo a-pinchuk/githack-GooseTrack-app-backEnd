@@ -14,7 +14,7 @@ const reviewSchema = new Schema({
     max: 5,
     default: 0,
   },
-  description: {
+  comment: {
     type: String,
     maxLength: 1000,
     required: [true, "DB: Description is required"],
@@ -26,7 +26,7 @@ reviewSchema.post("save", handleMongooseError);
 // * JOI
 const schemaAddReview = Joi.object({
   rating: Joi.number().min(0).max(5).required(),
-  description: Joi.string().max(1000).required(),
+  comment: Joi.string().max(1000).required(),
 });
 
 const schemas = {

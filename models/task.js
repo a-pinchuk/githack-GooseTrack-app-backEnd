@@ -47,11 +47,11 @@ const taskSchema = new Schema(
       default: typeCategory[0],
       // to-do | in-progress | done
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    //   required: [true, "Set owner contact"],
-    // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: [true, "Set owner contact"],
+    },
   },
   { versionKey: false, timestamps: true }
 );

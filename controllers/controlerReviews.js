@@ -1,56 +1,43 @@
 const expressAsyncHandler = require("express-async-handler");
 
+const { reviewsServices } = require("../services");
+
 class ControlerReviews {
-  getReviews(req, res) {
-    return expressAsyncHandler(async (req, res) => {
-      // const goods = await goodsServices.show({ ...req.query });
-      console.log("getReviews");
-      const reviews = [];
+  getReviews = expressAsyncHandler(async (req, res) => {
+    const { _id: owner } = req.user;
 
-      res.status(200).json({ code: 200, data: reviews, qty: reviews.length });
-    });
-  }
+    const reviews = await reviewsServices.show(owner);
 
-  getReviewById(req, res) {
-    return expressAsyncHandler(async (req, res) => {
-      // const goods = await goodsServices.show({ ...req.query });
-      console.log("getReviewById");
-      const review = [];
+    res.status(200).json({ code: 200, data: reviews, count: reviews.length });
+  });
 
-      res.status(200).json({ code: 200, data: review });
-    });
-  }
+  getReviewById = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const review = await reviewsServices.showById(id);
+    res.status(200).json({ code: 200, data: review });
+  });
 
-  addReview(req, res) {
-    return expressAsyncHandler(async (req, res) => {
-      // const goods = await goodsServices.show({ ...req.query });
-      console.log("addReview");
-      const review = [];
+  addReview = expressAsyncHandler(async (req, res) => {
+    const { _id: owner } = req.user;
+    const review = await reviewsServices.add(owner, { ...req.body });
 
-      res.status(200).json({ code: 200, data: review });
-    });
-  }
+    res.status(201).json({ code: 201, data: review });
+  });
 
-  changeReview(req, res) {
-    return expressAsyncHandler(async (req, res) => {
-      // const goods = await goodsServices.show({ ...req.query });
-      console.log("changeReview");
-      const review = [];
+  changeReview = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const review = await reviewsServices.change(id, { ...req.body });
 
-      res.status(200).json({ code: 200, data: review });
-    });
-  }
+    res.status(200).json({ code: 200, data: review });
+  });
 
-  deleteReview(req, res) {
-    return expressAsyncHandler(async (req, res) => {
-      // const goods = await goodsServices.show({ ...req.query });
-      console.log("deleteReview");
-      const review = [];
+  deleteReview = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const review = await reviewsServices.remove(id);
 
-      res.status(200).json({ code: 200, data: review });
-    });
-  }
+    res.status(200).json({ code: 200, data: review });
+  });
 }
 
 const controlerReviews = new ControlerReviews();
-export default controlerReviews;
+module.exports = controlerReviews;
