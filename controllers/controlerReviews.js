@@ -5,10 +5,13 @@ const { reviewsServices } = require("../services");
 class ControlerReviews {
   getReviews = expressAsyncHandler(async (req, res) => {
     const { _id: owner } = req.user;
+    const { page = 1, limit = 2 } = req.query;
 
-    const reviews = await reviewsServices.show(owner);
+    const skip = (page - 1) * limit;
 
-    res.status(200).json({ code: 200, data: reviews, count: reviews.length });
+    const reviews = await reviewsServices.show(owner, { skip, limit });
+
+    res.status(200).json({ code: 200, data: reviews });
   });
 
   getReviewById = expressAsyncHandler(async (req, res) => {

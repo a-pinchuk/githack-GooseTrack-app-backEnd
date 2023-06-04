@@ -2,9 +2,9 @@ const { modelReview } = require("../models/review");
 const { HttpError } = require("../helpers");
 
 class ReviewsServices {
-  show = async (owner) => {
+  show = async (owner, pagination) => {
     const reviews = await modelReview
-      .find({ owner }, "-createdAt -updatedAt -__v")
+      .find({ owner }, "-createdAt -updatedAt -__v", pagination)
       .populate("owner", "name avatarUrl");
 
     if (!reviews) {
