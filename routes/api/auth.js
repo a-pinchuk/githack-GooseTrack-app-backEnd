@@ -11,7 +11,6 @@ router.post('/verify', validateBody(schemas.emailSchema), ctrl.resendVerifyEmail
 router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
 router.post('/logout', auth, ctrl.logout);
-router.patch('/avatars', auth, upload.single('avatar'), ctrl.updateAvatar);
 router.patch(
   '/user',
   auth,
