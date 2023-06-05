@@ -429,6 +429,49 @@
     "/api/reviews": {
       "get": {
         "tags": ["Reviews"],
+        "summary": "Get all reviews all users",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": "integer",
+            "description": "Number page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer",
+            "description": "Count reviews in response"
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllReviewsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unable to fetch Tasks",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/reviews/my-reviews": {
+      "get": {
+        "tags": ["Reviews"],
         "summary": "Get all reviews",
         "parameters": [
           {
@@ -506,7 +549,7 @@
         }
       }
     },
-    "/api/reviews/:id": {
+    "/api/reviews/my-reviews/:id": {
       "get": {
         "tags": ["Reviews"],
         "summary": "Get reviews by ID",
