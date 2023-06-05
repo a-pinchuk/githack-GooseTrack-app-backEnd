@@ -2,6 +2,18 @@ const { modelReview } = require("../models/review");
 const { HttpError } = require("../helpers");
 
 class ReviewsServices {
+  showAll = async (pagination) => {
+    const reviews = await modelReview
+      .find({}, "-createdAt -updatedAt -__v", pagination)
+      .populate("owner", "name avatarUrl");
+
+    if (!reviews) {
+      throw HttpError(400, "Unable to fetch Review");
+    }
+
+    return reviews;
+  };
+
   show = async (owner, pagination) => {
     const reviews = await modelReview
       .find({ owner }, "-createdAt -updatedAt -__v", pagination)
