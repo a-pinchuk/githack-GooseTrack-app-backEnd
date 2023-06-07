@@ -23,13 +23,21 @@ const register = async (req, res) => {
 
   const payload = { id: newUser._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
-  console.log('🚀 ~ payload:', payload);
 
   await User.findByIdAndUpdate(newUser._id, { token }, { new: true });
 
-  res.status(201).json({
-    email: newUser.email,
+  const {
+    password: _password,
+    token: _token,
+    verificationToken,
+    createdAt,
+    updatedAt,
+    ...updatedUser
+  } = newUser.toObject();
+
+  res.json({
     token,
+    user: updatedUser,
   });
 };
 
