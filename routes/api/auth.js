@@ -1,5 +1,10 @@
 const express = require("express");
-const { validateBody, auth, upload, passport } = require("../../middlewares");
+const {
+  validateBody,
+  auth,
+  uploadCloud,
+  passport,
+} = require("../../middlewares");
 const { schemas } = require("../../models/user");
 const ctrl = require("../../controllers/users");
 
@@ -28,7 +33,7 @@ router.post("/logout", auth, ctrl.logout);
 router.patch(
   "/user",
   auth,
-  upload.single("avatar"),
+  uploadCloud.single("avatar"),
   validateBody(schemas.updateUserSchema),
   ctrl.updateUser
 );

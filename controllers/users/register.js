@@ -1,13 +1,14 @@
 const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
 const bcrypt = require("bcrypt");
-const gravatar = require("gravatar");
-const { v4 } = require("uuid");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const avatarUrl = gravatar.url(email);
 
   if (user) {
     throw HttpError(409, "Email already in use");
@@ -15,22 +16,35 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const verificationToken = v4();
-
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarUrl,
-    verificationToken,
   });
 
-  // await wrappedSendMail({
-  //   to: email,
-  //   subject: 'Please confirm your email',
-  //   html: `<a href="https://githack-goosetrack.onrender.com/api/users/verify/${verificationToken}">Confirm your email</a>`,
-  // });
-  res.status(201).json({
-    email: newUser.email,
+  const payload = { id: newUser._id };
+  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: "2m" });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: "7d",
+  });
+  await User.findByIdAndUpdate(
+    newUser._id,
+    { accessToken, refreshToken },
+    { new: true }
+  );
+
+  const {
+    password: _password,
+    token: _token,
+    verificationToken,
+    createdAt,
+    updatedAt,
+    ...updatedUser
+  } = newUser.toObject();
+
+  res.json({
+    accessToken,
+    refreshToken,
+    user: updatedUser,
   });
 };
 

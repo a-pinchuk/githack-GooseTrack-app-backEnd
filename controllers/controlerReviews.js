@@ -3,6 +3,16 @@ const expressAsyncHandler = require("express-async-handler");
 const { reviewsServices } = require("../services");
 
 class ControlerReviews {
+  getAllReviews = expressAsyncHandler(async (req, res) => {
+    const { page = 1, limit = 2 } = req.query;
+
+    const skip = (page - 1) * limit;
+
+    const reviews = await reviewsServices.showAll({ skip, limit });
+
+    res.status(200).json({ code: 200, data: reviews });
+  });
+
   getReviews = expressAsyncHandler(async (req, res) => {
     const { _id: owner } = req.user;
     const { page = 1, limit = 2 } = req.query;

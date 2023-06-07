@@ -1,13 +1,13 @@
 const validateBody = require("./validateBody");
 const isValidId = require("./isValidId");
 const auth = require("./auth");
-const upload = require("./upload");
+const uploadCloud = require("./uploadCloud");
 const passport = require("./google-authenticate");
 
 module.exports = {
   auth,
   validateBody,
   isValidId,
-  upload,
+  uploadCloud,
   passport,
 };

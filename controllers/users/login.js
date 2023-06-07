@@ -33,9 +33,19 @@ const login = async (req, res) => {
   });
   await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
 
+  const {
+    password: _password,
+    token: _token,
+    verificationToken,
+    createdAt,
+    updatedAt,
+    ...updatedUser
+  } = user.toObject();
+
   res.json({
     accessToken,
     refreshToken,
+    user: updatedUser,
   });
 };
 

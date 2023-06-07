@@ -33,7 +33,7 @@ const userSchema = new Schema(
     },
     avatarUrl: {
       type: String,
-      required: true,
+      default: null,
     },
     phone: {
       type: String,
@@ -54,6 +54,7 @@ const userSchema = new Schema(
     verificationToken: {
       type: String,
       required: [true, "Verify token is required"],
+      default: null,
     },
   },
   { versionKey: false, timestamps: true }
