@@ -1,4 +1,3 @@
-// const { nanoid } = require("nanoid");
 const passport = require("passport");
 const { Strategy } = require("passport-google-oauth2");
 const { User } = require("../models/user");
