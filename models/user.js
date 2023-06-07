@@ -1,9 +1,10 @@
-const { Schema, model } = require('mongoose');
-const { handleMongooseError } = require('../helpers');
-const Joi = require('joi');
+const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const dateRegexp = /^(?:(?:0[1-9]|[12][0-9]|3[01])\/(?:0[1-9]|1[0-2])\/(?:19|20)\d\d)?$/;
+const dateRegexp =
+  /^(?:(?:0[1-9]|[12][0-9]|3[01])\/(?:0[1-9]|1[0-2])\/(?:19|20)\d\d)?$/;
 const phoneRegexp = /^38\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}$/;
 
 const userSchema = new Schema(
@@ -14,15 +15,19 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [true, "Password is required"],
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       match: emailRegexp,
       unique: true,
     },
-    token: {
+    accessToken: {
+      type: String,
+      default: null,
+    },
+    refreshToken: {
       type: String,
       default: null,
     },
@@ -48,13 +53,13 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post('save', handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
@@ -64,6 +69,9 @@ const registerSchema = Joi.object({
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+});
+const refreshSchema = Joi.object({
+  refreshToken: Joi.string().required(),
 });
 
 const updateUserSchema = Joi.object({
@@ -82,11 +90,12 @@ const emailSchema = Joi.object({
 const schemas = {
   registerSchema,
   loginSchema,
+  refreshSchema,
   emailSchema,
   updateUserSchema,
 };
 
-const User = model('user', userSchema);
+const User = model("user", userSchema);
 
 module.exports = {
   User,

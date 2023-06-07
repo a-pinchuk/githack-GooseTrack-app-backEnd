@@ -1,8 +1,8 @@
-const { User } = require('../../models');
-const { HttpError } = require('../../helpers');
-const bcrypt = require('bcrypt');
-const gravatar = require('gravatar');
-const { v4 } = require('uuid');
+const { User } = require("../../models");
+const { HttpError } = require("../../helpers");
+const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
+const { v4 } = require("uuid");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -10,7 +10,7 @@ const register = async (req, res) => {
   const avatarUrl = gravatar.url(email);
 
   if (user) {
-    throw HttpError(409, 'Email already in use');
+    throw HttpError(409, "Email already in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
