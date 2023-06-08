@@ -5,7 +5,7 @@ class TasksServices {
   // owner,
   show = async (owner, filter) => {
     const tasks = await modelTask.find(
-      { date: { $regex: filter, $options: "i" } },
+      { date: { owner, $regex: filter, $options: "i" } },
       "-createdAt -updatedAt -__v"
     );
 
