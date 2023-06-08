@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const { HttpError } = require("../../helpers");
-const { User } = require("../../models");
+const jwt = require('jsonwebtoken');
+const { HttpError } = require('../../helpers');
+const { User } = require('../../models');
 const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
 const refresh = async (req, res) => {
@@ -8,9 +8,10 @@ const refresh = async (req, res) => {
 
   try {
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
-    const isExist = await User.findOne({ refreshToken: token });
-    if (!isExist) {
-      throw HttpError(403, "Invalid refresh token");
+    console.log('🚀 ~ id:', id);
+    const user = await User.findOne({ refreshToken: token });
+    if (!user) {
+      throw HttpError(403, 'Invalid refresh token');
     }
 
     const payload = {
@@ -18,12 +19,16 @@ const refresh = async (req, res) => {
     };
 
     const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-      expiresIn: "2m",
+      expiresIn: '2m',
     });
 
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
-      expiresIn: "7d",
+      expiresIn: '7d',
     });
+
+    // update the refreshToken in the database
+    user.refreshToken = refreshToken;
+    await user.save();
 
     res.json({ accessToken, refreshToken });
   } catch (err) {
