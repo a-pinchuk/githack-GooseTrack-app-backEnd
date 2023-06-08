@@ -2,17 +2,16 @@ const passport = require("passport");
 const { Strategy } = require("passport-google-oauth2");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
-const gravatar = require("gravatar");
 const { v4 } = require("uuid");
 const verificationToken = v4();
-const passwordGen = v4();
+const password = v4();
 
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = process.env;
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_BASE_URL } = process.env;
 
 const googleParams = {
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: `${BASE_URL}/api/users/google/callback`,
+  callbackURL: `${GOOGLE_BASE_URL}/api/users/google/callback`,
   passReqToCallback: true,
 };
 
@@ -25,19 +24,17 @@ const googleCallback = async (
 ) => {
   try {
     const { email, displayName } = profile;
-    const avatarUrl = gravatar.url(email);
     const user = await User.findOne({ email });
     if (user) {
       return done(null, { user });
     }
 
-    const password = await bcrypt.hash(passwordGen, 10);
+    const hashPassword = await bcrypt.hash(password, 10);
     console.log("password :", password);
     const newUser = await User.create({
       email,
-      password,
+      password: hashPassword,
       name: displayName,
-      avatarUrl,
       verificationToken,
     });
 
