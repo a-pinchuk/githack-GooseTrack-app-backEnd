@@ -1,7 +1,7 @@
-const { User } = require('../../models');
-const { HttpError } = require('../../helpers');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { User } = require("../../models");
+const { HttpError } = require("../../helpers");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
@@ -11,7 +11,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw HttpError(409, 'Email already in use');
+    throw HttpError(409, "Email already in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -22,12 +22,16 @@ const register = async (req, res) => {
   });
 
   const payload = { id: newUser._id };
-  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: '1d' });
+  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: "1m" });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
-    expiresIn: '7d',
+    expiresIn: "7d",
   });
 
-  await User.findByIdAndUpdate(newUser._id, { accessToken, refreshToken }, { new: true });
+  await User.findByIdAndUpdate(
+    newUser._id,
+    { accessToken, refreshToken },
+    { new: true }
+  );
 
   const {
     password: _password,
