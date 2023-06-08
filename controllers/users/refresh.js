@@ -8,7 +8,6 @@ const refresh = async (req, res) => {
 
   try {
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
-    console.log('🚀 ~ id:', id);
     const user = await User.findOne({ refreshToken: token });
     if (!user) {
       throw HttpError(403, 'Invalid refresh token');
@@ -28,6 +27,7 @@ const refresh = async (req, res) => {
 
     // update the refreshToken in the database
     user.refreshToken = refreshToken;
+    user.accessToken = accessToken;
     await user.save();
 
     res.json({ accessToken, refreshToken });
