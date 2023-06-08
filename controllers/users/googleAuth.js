@@ -10,7 +10,7 @@ const googleAuth = async (req, res) => {
 
   try {
     const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-      expiresIn: "2m",
+      expiresIn: "1m",
     });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
