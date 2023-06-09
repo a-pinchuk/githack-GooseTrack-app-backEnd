@@ -1,9 +1,10 @@
-const { Schema, model } = require('mongoose');
-const { handleMongooseError } = require('../helpers');
-const Joi = require('joi');
+const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const dateRegexp = /^(?:(?:0[1-9]|[12][0-9]|3[01])\/(?:0[1-9]|1[0-2])\/(?:19|20)\d\d)?$/;
+const dateRegexp =
+  /^(?:(?:0[1-9]|[12][0-9]|3[01])\/(?:0[1-9]|1[0-2])\/(?:19|20)\d\d)?$/;
 const phoneRegexp = /^38\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}$/;
 
 const userSchema = new Schema(
@@ -14,11 +15,11 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [true, "Password is required"],
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       match: emailRegexp,
       unique: true,
     },
@@ -50,7 +51,7 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post('save', handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
@@ -67,10 +68,10 @@ const refreshSchema = Joi.object({
 
 const updateUserSchema = Joi.object({
   name: Joi.string().required(),
-  phone: Joi.string().pattern(phoneRegexp).optional(),
-  skype: Joi.string().optional(),
+  phone: Joi.string().allow("").pattern(phoneRegexp).optional(),
+  skype: Joi.string().allow("").optional(),
   email: Joi.string().pattern(emailRegexp).required(),
-  birthday: Joi.string().pattern(dateRegexp).optional(),
+  birthday: Joi.string().allow("").pattern(dateRegexp).optional(),
   avatar: Joi.any().optional(),
 });
 
@@ -86,7 +87,7 @@ const schemas = {
   updateUserSchema,
 };
 
-const User = model('user', userSchema);
+const User = model("user", userSchema);
 
 module.exports = {
   User,

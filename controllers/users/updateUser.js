@@ -2,8 +2,10 @@ const { HttpError } = require("../../helpers");
 const { User } = require("../../models");
 
 const updateUser = async (req, res) => {
+  console.log("updateUser", req.body);
+
   const { _id } = req.user;
-  const avatarUrl = req.file.path;
+  const avatarUrl = req.file?.path;
 
   const updatedFields = {
     ...req.body,
