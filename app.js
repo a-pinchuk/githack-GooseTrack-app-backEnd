@@ -4,12 +4,12 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const dotenv = require("dotenv");
+dotenv.config();
 
 const usersRouter = require("./routes/api/auth");
 const tasksRouter = require("./routes/api/tasks");
 const reviewsRouter = require("./routes/api/reviews");
 
-dotenv.config();
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";

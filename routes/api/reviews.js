@@ -6,16 +6,23 @@ const ctrl = require("../../controllers/controlerReviews");
 
 const router = express.Router();
 
-router.get("/", auth, ctrl.getReviews);
-router.get("/:id", auth, isValidId, ctrl.getReviewById);
-router.post("/", auth, validateBody(schemas.schemaAddReview), ctrl.addReview);
+router.get("/", ctrl.getAllReviews);
+
+router.get("/my-reviews", auth, ctrl.getReviews);
+router.get("/my-reviews/:id", auth, isValidId, ctrl.getReviewById);
+router.post(
+  "/my-reviews",
+  auth,
+  validateBody(schemas.schemaAddReview),
+  ctrl.addReview
+);
 router.put(
-  "/:id",
+  "/my-reviews/:id",
   auth,
   isValidId,
   validateBody(schemas.schemaAddReview),
   ctrl.changeReview
 );
-router.delete("/:id", auth, isValidId, ctrl.deleteReview);
+router.delete("/my-reviews/:id", auth, isValidId, ctrl.deleteReview);
 
 module.exports = router;
