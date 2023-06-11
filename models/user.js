@@ -87,9 +87,9 @@ const schemas = {
   updateUserSchema,
 };
 
-const User = model("user", userSchema);
+const modelUser = model("user", userSchema);
 
 module.exports = {
-  User,
+  modelUser,
   schemas,
 };
