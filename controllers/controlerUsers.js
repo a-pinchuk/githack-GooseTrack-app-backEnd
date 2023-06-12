@@ -176,7 +176,6 @@ class ControlerUsers {
   // * forgotPassword
   forgotPassword = async (req, res) => {
     const { email } = req.body;
-    console.log('🚀 ~ email:', email);
     const user = await usersServices.findUser({ email });
 
     if (!user) {
@@ -189,7 +188,7 @@ class ControlerUsers {
 
     await user.save();
 
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = `https://a-pinchuk.github.io/githack-GooseTrack-app/reset-password/${resetToken}`;
 
     await wrappedSendMail({
       to: email,
@@ -211,9 +210,7 @@ class ControlerUsers {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_RESET);
-    console.log('🚀 ~ decoded:', decoded.id);
     const user = await usersServices.findUser({ _id: decoded.id, resetPasswordToken: token });
-    console.log('🚀 ~ user:', user);
 
     if (!user) {
       throw HttpError(400, 'Token is invalid or has expired');
