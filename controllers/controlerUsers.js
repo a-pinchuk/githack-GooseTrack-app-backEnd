@@ -25,12 +25,14 @@ class ControlerUsers {
 
   // * googleAuth.js
   googleAuth = expressAsyncHandler(async (req, res) => {
-    const { id } = req.user;
-    const [accessToken, refreshToken] = createPairToken({ id });
-    await usersServices.updateUserById(id, { accessToken, refreshToken });
+    const { _id } = req.user;
+    const [accessToken, refreshToken] = createPairToken({ _id });
+    await usersServices.updateUserById(_id, { accessToken, refreshToken });
 
     res.redirect(
-      `${FRONTEND_URL}?accessToken=${refreshToken}&refreshToken=${refreshToken}`
+      `${FRONTEND_URL}?accessToken=${encodeURIComponent(
+        accessToken
+      )}&refreshToken=${encodeURIComponent(refreshToken)}`
     );
   });
 

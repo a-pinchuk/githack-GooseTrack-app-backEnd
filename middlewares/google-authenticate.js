@@ -1,6 +1,6 @@
 const passport = require("passport");
 const { Strategy } = require("passport-google-oauth2");
-const { User } = require("../models/user");
+const { usersServices } = require("../services");
 const bcrypt = require("bcrypt");
 const { v4 } = require("uuid");
 const verificationToken = v4();
@@ -24,21 +24,20 @@ const googleCallback = async (
 ) => {
   try {
     const { email, displayName } = profile;
-    const user = await User.findOne({ email });
+    const user = await usersServices.findUser({ email });
     if (user) {
-      return done(null, { user });
+      return done(null, user);
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    console.log("password :", password);
-    const newUser = await User.create({
+    const newUser = await usersServices.createUser({
       email,
       password: hashPassword,
       name: displayName,
       verificationToken,
     });
 
-    return done(null, { newUser });
+    return done(null, newUser);
   } catch (err) {
     return done(err, false);
   }
