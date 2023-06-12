@@ -19,8 +19,13 @@ class ControlerUsers {
     const { avatarUrl, name, email, phone, skype, birthday, createdAt } = req.user;
 
     res.status(200).json({
-      code: 200,
-      data: { avatarUrl, name, email, phone, skype, birthday, createdAt },
+      avatarUrl,
+      name,
+      email,
+      phone,
+      skype,
+      birthday,
+      createdAt,
     });
   });
 
