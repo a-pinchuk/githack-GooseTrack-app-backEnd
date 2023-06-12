@@ -26,11 +26,10 @@ const googleCallback = async (
     const { email, displayName } = profile;
     const user = await User.findOne({ email });
     if (user) {
-      return done(null, { user });
+      return done(null, user);
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    console.log("password :", password);
     const newUser = await User.create({
       email,
       password: hashPassword,
@@ -38,7 +37,7 @@ const googleCallback = async (
       verificationToken,
     });
 
-    return done(null, { newUser });
+    return done(null, newUser);
   } catch (err) {
     return done(err, false);
   }
