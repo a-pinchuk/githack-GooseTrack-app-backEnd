@@ -16,19 +16,10 @@ const sendMail = async ({ to, subject, html }) => {
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'matveigoit@outlook.com', // generated ethereal user
-      pass: 'qwe123goit', // generated ethereal password
+      user: 'EMAIL_USER', // generated ethereal user
+      pass: 'EMAIL_PASS', // generated ethereal password
     },
   });
-
-  // const transport = nodemailer.createTransport({
-  //   host: "sandbox.smtp.mailtrap.io",
-  //   port: 2525,
-  //   auth: {
-  //     user: EMAIL_USER,
-  //     pass: EMAIL_PASS,
-  //   },
-  // });
 
   await transport.sendMail(email);
 };
