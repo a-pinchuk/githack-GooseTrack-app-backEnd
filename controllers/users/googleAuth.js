@@ -23,7 +23,9 @@ const googleAuth = async (req, res) => {
     );
 
     res.redirect(
-      `${FRONTEND_URL}?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `${FRONTEND_URL}?accessToken=${encodeURIComponent(
+        accessToken
+      )}&refreshToken=${encodeURIComponent(refreshToken)}`
     );
   } catch (err) {
     throw HttpError(400, { message: err.message });
