@@ -1,12 +1,14 @@
-const expressAsyncHandler = require("express-async-handler");
-const { usersServices } = require("../services");
+const jwt = require('jsonwebtoken');
+const expressAsyncHandler = require('express-async-handler');
+const { usersServices } = require('../services');
 const {
   HttpError,
   createPairToken,
   getPayloadRefreshToken,
-} = require("../helpers");
+  wrappedSendMail,
+} = require('../helpers');
 
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 const { FRONTEND_URL } = process.env;
 
@@ -14,8 +16,7 @@ class ControlerUsers {
   //
   // * currentUser.js
   currentUser = expressAsyncHandler(async (req, res) => {
-    const { avatarUrl, name, email, phone, skype, birthday, createdAt } =
-      req.user;
+    const { avatarUrl, name, email, phone, skype, birthday, createdAt } = req.user;
 
     res.status(200).json({
       code: 200,
@@ -44,7 +45,7 @@ class ControlerUsers {
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-      throw HttpError(401, "Email or password invalid");
+      throw HttpError(401, 'Email or password invalid');
     }
 
     const [accessToken, refreshToken] = createPairToken({ id: user._id });
@@ -73,11 +74,11 @@ class ControlerUsers {
     const { _id } = req.user;
 
     await usersServices.updateUserById(_id, {
-      accessToken: "",
-      refreshToken: "",
+      accessToken: '',
+      refreshToken: '',
     });
 
-    res.status(204).json({ message: "Successful logout" });
+    res.status(204).json({ message: 'Successful logout' });
   });
 
   // * refresh.js
@@ -89,7 +90,7 @@ class ControlerUsers {
     const user = await usersServices.findUser({ refreshToken: token }, false);
 
     if (!user) {
-      throw HttpError(403, "Invalid refresh token");
+      throw HttpError(403, 'Invalid refresh token');
     }
 
     const [accessToken, refreshToken] = createPairToken({ id });
@@ -109,7 +110,7 @@ class ControlerUsers {
     const user = await usersServices.findUser({ email }, false);
 
     if (user) {
-      throw HttpError(409, "Email already in use");
+      throw HttpError(409, 'Email already in use');
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -151,7 +152,7 @@ class ControlerUsers {
     const userByEmail = await usersServices.findUser({ email }, false);
 
     if (userByEmail && String(userByEmail._id) !== String(_id)) {
-      throw HttpError(409, "Email already in use");
+      throw HttpError(409, 'Email already in use');
     }
 
     const avatarUrl = req.file?.path;
@@ -164,14 +165,67 @@ class ControlerUsers {
     const user = await usersServices.updateUserById(_id, updatedFields, false);
 
     if (!user) {
-      throw HttpError(404, "User not found");
+      throw HttpError(404, 'User not found');
     }
 
-    const { token, password, verificationToken, updatedAt, ...updatedUser } =
-      user.toObject();
+    const { token, password, verificationToken, updatedAt, ...updatedUser } = user.toObject();
 
-    res.status(200).json({ message: "UserInfo updated", user: updatedUser });
+    res.status(200).json({ message: 'UserInfo updated', user: updatedUser });
   });
+
+  // * forgotPassword
+  forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    console.log('🚀 ~ email:', email);
+    const user = await usersServices.findUser({ email });
+
+    if (!user) {
+      throw HttpError(404, 'User not found');
+    }
+
+    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_RESET, { expiresIn: '1h' });
+
+    user.resetPasswordToken = resetToken;
+
+    await user.save();
+
+    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+
+    await wrappedSendMail({
+      to: email,
+      subject: 'Password Reset Request',
+      html: `<p>You requested for a password reset, kindly use this 
+              <a href="${resetUrl}">link</a> to reset your password. <br/> 
+              This link is only valid for the next 1 hour.</p>`,
+    });
+
+    res.status(200).json({ message: 'Password reset link sent to your email.' });
+  };
+
+  // * resetPassword
+  resetPassword = async (req, res, next) => {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      throw HttpError(400, 'Token and new password are required');
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_RESET);
+    console.log('🚀 ~ decoded:', decoded.id);
+    const user = await usersServices.findUser({ _id: decoded.id, resetPasswordToken: token });
+    console.log('🚀 ~ user:', user);
+
+    if (!user) {
+      throw HttpError(400, 'Token is invalid or has expired');
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordToken = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Password reset successful.' });
+  };
 }
 
 const controlerUsers = new ControlerUsers();
