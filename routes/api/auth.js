@@ -6,7 +6,7 @@ const {
   passport,
 } = require("../../middlewares");
 const { schemas } = require("../../models/user");
-const ctrl = require("../../controllers/users");
+const ctrl = require("../../controllers/controlerUsers");
 
 const router = express.Router();
 
@@ -26,6 +26,7 @@ router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
 router.post("/refresh", validateBody(schemas.refreshSchema), ctrl.refresh);
+
 router.post("/logout", auth, ctrl.logout);
 router.patch(
   "/user",
