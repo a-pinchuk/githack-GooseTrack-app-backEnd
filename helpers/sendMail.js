@@ -12,7 +12,7 @@ const sendMail = async ({ to, subject, html }, next) => {
   };
 
   let transport = nodemailer.createTransport({
-    host: 'smtp-mail.outlook.com',
+    host: 'smtp.office365.com',
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
