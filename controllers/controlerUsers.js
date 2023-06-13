@@ -15,7 +15,7 @@ const { FRONTEND_URL } = process.env;
 class ControlerUsers {
   //
   // * currentUser.js
-  currentUser = expressAsyncHandler(async (req, res) => {
+  currentUser = expressAsyncHandler(async (req, res, next) => {
     const { avatarUrl, name, email, phone, skype, birthday, createdAt } = req.user;
 
     res.status(200).json({
@@ -30,7 +30,7 @@ class ControlerUsers {
   });
 
   // * googleAuth.js
-  googleAuth = expressAsyncHandler(async (req, res) => {
+  googleAuth = expressAsyncHandler(async (req, res, next) => {
     const { _id } = req.user;
     const [accessToken, refreshToken] = createPairToken({ _id });
     await usersServices.updateUserById(_id, { accessToken, refreshToken });
@@ -43,7 +43,7 @@ class ControlerUsers {
   });
 
   // * login.js
-  login = expressAsyncHandler(async (req, res) => {
+  login = expressAsyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await usersServices.findUser({ email });
@@ -75,7 +75,7 @@ class ControlerUsers {
   });
 
   // * logout.js
-  logout = expressAsyncHandler(async (req, res) => {
+  logout = expressAsyncHandler(async (req, res, next) => {
     const { _id } = req.user;
 
     await usersServices.updateUserById(_id, {
@@ -87,7 +87,7 @@ class ControlerUsers {
   });
 
   // * refresh.js
-  refresh = expressAsyncHandler(async (req, res) => {
+  refresh = expressAsyncHandler(async (req, res, next) => {
     const { refreshToken: token } = req.body;
 
     const { id } = getPayloadRefreshToken(token);
@@ -109,7 +109,7 @@ class ControlerUsers {
   });
 
   // * register.js
-  register = expressAsyncHandler(async (req, res) => {
+  register = expressAsyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await usersServices.findUser({ email }, false);
@@ -150,7 +150,7 @@ class ControlerUsers {
   });
 
   //  * updateUser.js
-  updateUser = expressAsyncHandler(async (req, res) => {
+  updateUser = expressAsyncHandler(async (req, res, next) => {
     const { _id } = req.user;
     const { email } = req.body;
 
@@ -179,7 +179,7 @@ class ControlerUsers {
   });
 
   // * forgotPassword
-  forgotPassword = async (req, res) => {
+  forgotPassword = async (req, res, next) => {
     const { email } = req.body;
     const user = await usersServices.findUser({ email });
 
