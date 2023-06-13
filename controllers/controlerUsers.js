@@ -1,12 +1,7 @@
 const jwt = require('jsonwebtoken');
 const expressAsyncHandler = require('express-async-handler');
 const { usersServices } = require('../services');
-const {
-  HttpError,
-  createPairToken,
-  getPayloadRefreshToken,
-  wrappedSendMail,
-} = require('../helpers');
+const { HttpError, createPairToken, getPayloadRefreshToken, sendMail } = require('../helpers');
 
 const bcrypt = require('bcrypt');
 
@@ -179,7 +174,7 @@ class ControlerUsers {
   });
 
   // * forgotPassword
-  forgotPassword = expressAsyncHandler(async (req, res, next) => {
+  forgotPassword = expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
     const user = await usersServices.findUser({ email });
 
@@ -195,19 +190,61 @@ class ControlerUsers {
 
     const resetUrl = `https://a-pinchuk.github.io/githack-GooseTrack-app/reset-password/${resetToken}`;
 
-    await wrappedSendMail({
+    await sendMail({
       to: email,
       subject: 'Password Reset Request',
-      html: `<p>You requested for a password reset, kindly use this 
-              <a href="${resetUrl}">link</a> to reset your password. <br/> 
-              This link is only valid for the next 1 hour.</p>`,
+      html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+          }
+          .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+          }
+          .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            background-color: #008CBA; /* Blue */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+          }
+          .button:hover {
+            background-color: #4CAF50; /* Green */
+            color: white;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Восстановление пароля</h2>
+          <p>Вы запросили сброс пароля, пожалуйста, используйте эту ссылку для сброса вашего пароля. Эта ссылка будет действительна только в течение следующего часа.</p>
+          <a href="${resetUrl}" class="button">Сбросить пароль</a>
+        </div>
+      </body>
+      </html>
+    `,
     });
 
     res.status(200).json({ message: 'Password reset link sent to your email.' });
   });
 
   // * resetPassword
-  resetPassword = expressAsyncHandler(async (req, res, next) => {
+  resetPassword = expressAsyncHandler(async (req, res) => {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
