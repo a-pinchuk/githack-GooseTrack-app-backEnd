@@ -4,7 +4,7 @@ const { reviewsServices } = require("../services");
 
 class ControlerReviews {
   getAllReviews = expressAsyncHandler(async (req, res) => {
-    const { page = 1, limit = 2 } = req.query;
+    const { page = 1, limit = 10 } = req.query;
 
     const skip = (page - 1) * limit;
 
