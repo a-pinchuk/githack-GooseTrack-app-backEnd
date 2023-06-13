@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const { EMAIL_USER, EMAIL_PASS } = process.env;
 
-const sendMail = async ({ to, subject, html }) => {
+const sendMail = async ({ to, subject, html }, next) => {
   // const from = "sandbox.smtp.mailtrap.io";
   const from = 'matveigoit@outlook.com';
   const email = {
