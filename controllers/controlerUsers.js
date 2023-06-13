@@ -27,9 +27,8 @@ class ControlerUsers {
   // * googleAuth.js
   googleAuth = expressAsyncHandler(async (req, res, next) => {
     const { _id } = req.user;
-    const [accessToken, refreshToken] = createPairToken({ _id });
+    const [accessToken, refreshToken] = createPairToken({ id: _id });
     await usersServices.updateUserById(_id, { accessToken, refreshToken });
-
     res.redirect(
       `${FRONTEND_URL}?accessToken=${encodeURIComponent(
         accessToken
