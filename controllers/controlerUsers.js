@@ -179,7 +179,7 @@ class ControlerUsers {
   });
 
   // * forgotPassword
-  forgotPassword = async (req, res, next) => {
+  forgotPassword = expressAsyncHandler(async (req, res, next) => {
     const { email } = req.body;
     const user = await usersServices.findUser({ email });
 
@@ -204,10 +204,10 @@ class ControlerUsers {
     });
 
     res.status(200).json({ message: 'Password reset link sent to your email.' });
-  };
+  });
 
   // * resetPassword
-  resetPassword = async (req, res, next) => {
+  resetPassword = expressAsyncHandler(async (req, res, next) => {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
@@ -227,7 +227,7 @@ class ControlerUsers {
     await user.save();
 
     res.status(200).json({ message: 'Password reset successful.' });
-  };
+  });
 }
 
 const controlerUsers = new ControlerUsers();
