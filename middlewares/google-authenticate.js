@@ -1,8 +1,8 @@
-const passport = require("passport");
-const { Strategy } = require("passport-google-oauth2");
-const { usersServices } = require("../services");
-const bcrypt = require("bcrypt");
-const { v4 } = require("uuid");
+const passport = require('passport');
+const { Strategy } = require('passport-google-oauth2');
+const { usersServices } = require('../services');
+const bcrypt = require('bcrypt');
+const { v4 } = require('uuid');
 const verificationToken = v4();
 const password = v4();
 
@@ -15,16 +15,10 @@ const googleParams = {
   passReqToCallback: true,
 };
 
-const googleCallback = async (
-  req,
-  accessToken,
-  refreshToken,
-  profile,
-  done
-) => {
+const googleCallback = async (req, accessToken, refreshToken, profile, done) => {
   try {
     const { email, displayName } = profile;
-    const user = await usersServices.findUser({ email });
+    const user = await usersServices.findUser({ email }, false);
     if (user) {
       return done(null, user);
     }
@@ -45,6 +39,6 @@ const googleCallback = async (
 
 const googleStrategy = new Strategy(googleParams, googleCallback);
 
-passport.use("google", googleStrategy);
+passport.use('google', googleStrategy);
 
 module.exports = passport;
