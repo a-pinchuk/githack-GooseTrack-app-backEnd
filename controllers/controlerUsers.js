@@ -253,6 +253,7 @@ class ControlerUsers {
 
     const decoded = jwt.verify(token, process.env.JWT_RESET);
     const user = await usersServices.findUser({ _id: decoded.id, resetPasswordToken: token });
+    console.log('🚀 ~ user:', user);
 
     if (!user) {
       throw HttpError(400, 'Token is invalid or has expired');
