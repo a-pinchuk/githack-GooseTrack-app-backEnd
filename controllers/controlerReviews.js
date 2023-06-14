@@ -3,6 +3,7 @@ const expressAsyncHandler = require("express-async-handler");
 const { reviewsServices } = require("../services");
 
 class ControlerReviews {
+  // * getAllReviews
   getAllReviews = expressAsyncHandler(async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
@@ -13,6 +14,7 @@ class ControlerReviews {
     res.status(200).json({ code: 200, data: reviews });
   });
 
+  // * getReviews
   getReviews = expressAsyncHandler(async (req, res) => {
     const { _id: owner } = req.user;
     const { page = 1, limit = 2 } = req.query;
@@ -24,6 +26,7 @@ class ControlerReviews {
     res.status(200).json({ code: 200, data: reviews });
   });
 
+  // * getReviewById
   getReviewById = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const review = await reviewsServices.showById(id);
@@ -37,6 +40,7 @@ class ControlerReviews {
     res.status(201).json({ code: 201, data: review });
   });
 
+  // * changeReview
   changeReview = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const review = await reviewsServices.change(id, { ...req.body });
@@ -44,6 +48,7 @@ class ControlerReviews {
     res.status(200).json({ code: 200, data: review });
   });
 
+  // * deleteReview
   deleteReview = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const review = await reviewsServices.remove(id);

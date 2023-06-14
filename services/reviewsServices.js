@@ -11,7 +11,7 @@ class ReviewsServices {
     const reviews = await modelReview.aggregate([
       // Групування за полем "owner"
       { $group: { _id: "$owner", createdAt: { $last: "$$ROOT" } } },
-      // Проектування лише поля "lastReview" для кожної групи
+      // Проектування лише поля "createdAt" для кожної групи
       { $replaceRoot: { newRoot: "$createdAt" } },
       {
         $lookup: {
@@ -69,15 +69,11 @@ class ReviewsServices {
   };
 
   add = async (owner, data) => {
-    console.log("🚀 ~ data:", data);
-
     const review = await modelReview.create({ ...data, owner });
 
     if (!review) {
       throw HttpError(400, "Unable to save Review in DataBase");
     }
-
-    // const { createdAt, updatedAt, __v, ...createdReview } = review.toObject();
 
     return this.showById(review._id);
   };

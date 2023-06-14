@@ -18,6 +18,7 @@ const getFilter = (params) => {
 };
 
 class ControlerTasks {
+  // * getTasks
   getTasks = expressAsyncHandler(async (req, res) => {
     const { _id: owner } = req.user;
     const filter = getFilter({ ...req.query });
@@ -27,12 +28,14 @@ class ControlerTasks {
     res.status(200).json({ code: 200, data: tasks, count: tasks.length });
   });
 
+  // * getTaskById
   getTaskById = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const task = await tasksServices.showById(id);
     res.status(200).json({ code: 200, data: task });
   });
 
+  // * addTask
   addTask = expressAsyncHandler(async (req, res) => {
     const { _id: owner } = req.user;
     const task = await tasksServices.add(owner, { ...req.body });
@@ -40,6 +43,7 @@ class ControlerTasks {
     res.status(201).json({ code: 201, data: task });
   });
 
+  // * changeTask
   changeTask = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const task = await tasksServices.change(id, { ...req.body });
@@ -47,6 +51,7 @@ class ControlerTasks {
     res.status(200).json({ code: 200, data: task });
   });
 
+  // * changeCategoryTask
   changeCategoryTask = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const task = await tasksServices.changeCategory(id, { ...req.body });
@@ -54,6 +59,7 @@ class ControlerTasks {
     res.status(200).json({ code: 200, data: task });
   });
 
+  // * deleteTask
   deleteTask = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const review = await tasksServices.remove(id);

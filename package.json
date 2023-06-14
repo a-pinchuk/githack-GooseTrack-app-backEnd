@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "author": "a-pinchuk & kcepriu & ammolder",
+    "description": "web Goose Track service.",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.37.0",
     "cors": "2.8.5",
