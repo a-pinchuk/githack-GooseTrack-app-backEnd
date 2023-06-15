@@ -3,7 +3,7 @@ const { EMAIL_USER, EMAIL_PASS } = process.env;
 
 const sendMail = async ({ to, subject, html }) => {
   // const from = "sandbox.smtp.mailtrap.io";
-  const from = 'matveigoit@outlook.com';
+  const from = 'matvei.goit@meta.ua';
   const email = {
     to,
     from,
@@ -12,9 +12,9 @@ const sendMail = async ({ to, subject, html }) => {
   };
 
   let transport = nodemailer.createTransport({
-    host: 'smtp.office365.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    host: 'smtp.meta.ua',
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
