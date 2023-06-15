@@ -2,7 +2,6 @@ const { modelTask } = require("../models/task");
 const { HttpError } = require("../helpers");
 
 class TasksServices {
-  // owner,
   show = async (owner, filter) => {
     const tasks = await modelTask.find(
       { owner, date: { $regex: filter, $options: "i" } },

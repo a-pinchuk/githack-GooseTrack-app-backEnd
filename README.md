@@ -1,31 +1,48 @@
-## GoIT Node.js Course Template Homework
+# Node.js Goose Track - Backend part
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Full Stack Application.
 
-Додайте ментора до колаборації
+[View Demo](https://a-pinchuk.github.io/githack-GooseTrack-app/)
 
-Для кожної домашньої роботи створюйте свою гілку.
+## Tools
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+Goose Track is built using the following tools:
 
-Кожна нова гілка для др повинна робитися з master
+- [MongoDB](https://www.mongodb.com/)
+- [Express.js](https://expressjs.com)
+- [Node.js](https://nodejs.org/)
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+## Installation
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+To install Goose Track, follow these steps:
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+1. Clone the Goose Track repository to your local machine using git clone git@github.com:a-pinchuk/githack-GooseTrack-app-backEnd.git
+2. Navigate to the project directory using cd githack-GooseTrack-app-backEnd.
+3. Install dependencies using npm install.
+4. Create .envfile and add your environment variables:
+   - DB_HOST: your MongoDB connection string
+   - PORT: port of this program
+   - SECRET_KEY: secret key email service
+   - EMAIL_USER: user email service
+   - EMAIL_PASS: password email service
+   - CLOUDNERY_API_NAME: cloudnery api name
+   - CLOUDNERY_API_KEY: cloudnery api key
+   - CLOUDNERY_API_SECRET: cloudnery api secret
+   - CLOUDINARY_URL: cloudnery URL
+   - GOOGLE_CLIENT_ID: id google client
+   - GOOGLE_CLIENT_SECRET: secret string for signing google client
+   - BASE_URL: URL Front End part
+   - FRONTEND_URL: URL Front End reset password
+   - REFRESH_SECRET_KEY: secret string for signing refresh token
+   - ACCESS_SECRET_KEY: secret string for signing access token
+   - JWT_RESET: secret string for signing reset token
+5. Start the server using
 
-### Команди:
+- $ npm run start:dev
+- $ npm start
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+## Links
+
+- [Live Demo](https://a-pinchuk.github.io/githack-GooseTrack-app/)
+- [Frontend Repository](https://github.com/a-pinchuk/githack-GooseTrack-app)
+- [Backend Repository](https://github.com/a-pinchuk/githack-GooseTrack-app-backEnd)

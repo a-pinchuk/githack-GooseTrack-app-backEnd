@@ -1,9 +1,15 @@
-const jwt = require('jsonwebtoken');
-const expressAsyncHandler = require('express-async-handler');
-const { usersServices } = require('../services');
-const { HttpError, createPairToken, getPayloadRefreshToken, sendMail } = require('../helpers');
+const jwt = require("jsonwebtoken");
+const expressAsyncHandler = require("express-async-handler");
+const { usersServices } = require("../services");
+const {
+  HttpError,
+  createPairToken,
+  getPayloadRefreshToken,
+  sendMail,
+} = require("../helpers");
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
+const { templateMailForgotPassword } = require("../templates");
 
 const { FRONTEND_URL } = process.env;
 
@@ -11,7 +17,8 @@ class ControlerUsers {
   //
   // * currentUser.js
   currentUser = expressAsyncHandler(async (req, res, next) => {
-    const { avatarUrl, name, email, phone, skype, birthday, createdAt } = req.user;
+    const { avatarUrl, name, email, phone, skype, birthday, createdAt } =
+      req.user;
 
     res.status(200).json({
       avatarUrl,
@@ -44,7 +51,7 @@ class ControlerUsers {
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-      throw HttpError(401, 'Email or password invalid');
+      throw HttpError(401, "Email or password invalid");
     }
 
     const [accessToken, refreshToken] = createPairToken({ id: user._id });
@@ -73,11 +80,11 @@ class ControlerUsers {
     const { _id } = req.user;
 
     await usersServices.updateUserById(_id, {
-      accessToken: '',
-      refreshToken: '',
+      accessToken: "",
+      refreshToken: "",
     });
 
-    res.status(204).json({ message: 'Successful logout' });
+    res.status(204).json({ message: "Successful logout" });
   });
 
   // * refresh.js
@@ -89,7 +96,7 @@ class ControlerUsers {
     const user = await usersServices.findUser({ refreshToken: token }, false);
 
     if (!user) {
-      throw HttpError(403, 'Invalid refresh token');
+      throw HttpError(403, "Invalid refresh token");
     }
 
     const [accessToken, refreshToken] = createPairToken({ id });
@@ -109,7 +116,7 @@ class ControlerUsers {
     const user = await usersServices.findUser({ email }, false);
 
     if (user) {
-      throw HttpError(409, 'Email already in use');
+      throw HttpError(409, "Email already in use");
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -151,7 +158,7 @@ class ControlerUsers {
     const userByEmail = await usersServices.findUser({ email }, false);
 
     if (userByEmail && String(userByEmail._id) !== String(_id)) {
-      throw HttpError(409, 'Email already in use');
+      throw HttpError(409, "Email already in use");
     }
 
     const avatarUrl = req.file?.path;
@@ -164,12 +171,13 @@ class ControlerUsers {
     const user = await usersServices.updateUserById(_id, updatedFields, false);
 
     if (!user) {
-      throw HttpError(404, 'User not found');
+      throw HttpError(404, "User not found");
     }
 
-    const { token, password, verificationToken, updatedAt, ...updatedUser } = user.toObject();
+    const { token, password, verificationToken, updatedAt, ...updatedUser } =
+      user.toObject();
 
-    res.status(200).json({ message: 'UserInfo updated', user: updatedUser });
+    res.status(200).json({ message: "UserInfo updated", user: updatedUser });
   });
 
   // * forgotPassword
@@ -178,10 +186,12 @@ class ControlerUsers {
     const user = await usersServices.findUser({ email });
 
     if (!user) {
-      throw HttpError(404, 'User not found');
+      throw HttpError(404, "User not found");
     }
 
-    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_RESET, { expiresIn: '1h' });
+    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_RESET, {
+      expiresIn: "1h",
+    });
 
     user.resetPasswordToken = resetToken;
 
@@ -191,55 +201,13 @@ class ControlerUsers {
 
     await sendMail({
       to: email,
-      subject: 'Password Reset Request',
-      html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-          }
-          .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-          }
-          .button {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            background-color: #008CBA; /* Blue */
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-          }
-          .button:hover {
-            background-color: #4CAF50; /* Green */
-            color: white;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h2>Восстановление пароля</h2>
-          <p>Вы запросили сброс пароля, пожалуйста, используйте эту ссылку для сброса вашего пароля. Эта ссылка будет действительна только в течение следующего часа.</p>
-          <a href="${resetUrl}" class="button">Сбросить пароль</a>
-        </div>
-      </body>
-      </html>
-    `,
+      subject: "Password Reset Request",
+      html: templateMailForgotPassword(resetUrl),
     });
 
-    res.status(200).json({ message: 'Password reset link sent to your email.' });
+    res
+      .status(200)
+      .json({ message: "Password reset link sent to your email." });
   });
 
   // * resetPassword
@@ -247,15 +215,17 @@ class ControlerUsers {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
-      throw HttpError(400, 'Token and new password are required');
+      throw HttpError(400, "Token and new password are required");
     }
 
     const decoded = jwt.verify(token, process.env.JWT_RESET);
-    const user = await usersServices.findUser({ _id: decoded.id, resetPasswordToken: token });
-    console.log('🚀 ~ user:', user);
+    const user = await usersServices.findUser({
+      _id: decoded.id,
+      resetPasswordToken: token,
+    });
 
     if (!user) {
-      throw HttpError(400, 'Token is invalid or has expired');
+      throw HttpError(400, "Token is invalid or has expired");
     }
 
     user.password = await bcrypt.hash(newPassword, 10);
@@ -263,7 +233,7 @@ class ControlerUsers {
 
     await user.save();
 
-    res.status(200).json({ message: 'Password reset successful.' });
+    res.status(200).json({ message: "Password reset successful." });
   });
 }
 

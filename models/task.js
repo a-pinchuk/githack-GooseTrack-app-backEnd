@@ -17,35 +17,29 @@ const taskSchema = new Schema(
     date: {
       type: String,
       required: [true, "DB: Date is required"],
-      match: regexpData,
-      //  YYYY-MM-DD
+      match: regexpData, //  YYYY-MM-DD
     },
     start: {
       type: String,
       required: [true, "DB: Start is required"],
-      match: regexpTime,
-      //  09:00
+      match: regexpTime, //  09:00
     },
     end: {
       type: String,
       required: [true, "DB: End is required"],
-      match: regexpTime,
-      //  09:00
-      // end > start
+      match: regexpTime, //  09:00
     },
     priority: {
       type: String,
       required: [true, "DB: Priority is required"],
-      enum: typePriority,
+      enum: typePriority, // low | medium | high
       default: typePriority[0],
-      // low | medium | high
     },
     category: {
       type: String,
       required: [true, "DB: Category is required"],
-      enum: typeCategory,
+      enum: typeCategory, // to-do | in-progress | done
       default: typeCategory[0],
-      // to-do | in-progress | done
     },
     owner: {
       type: Schema.Types.ObjectId,

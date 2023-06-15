@@ -1,8 +1,7 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const { EMAIL_USER, EMAIL_PASS } = process.env;
 
 const sendMail = async ({ to, subject, html }) => {
-  // const from = "sandbox.smtp.mailtrap.io";
   const from = 'matvei.goit@meta.ua';
   const email = {
     to,
@@ -16,8 +15,8 @@ const sendMail = async ({ to, subject, html }) => {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
     },
   });
 
