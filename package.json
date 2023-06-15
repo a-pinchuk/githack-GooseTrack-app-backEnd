@@ -1,6 +1,8 @@
 {
   "name": "githack-GooseTrack",
   "version": "0.0.0",
+  "author": "a-pinchuk & kcepriu & ammolder",
+  "description": "web Goose Track service.",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
@@ -10,8 +12,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "author": "a-pinchuk & kcepriu & ammolder",
-    "description": "web Goose Track service.",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.37.0",
     "cors": "2.8.5",
