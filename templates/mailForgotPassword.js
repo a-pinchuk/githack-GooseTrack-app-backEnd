@@ -1,5 +1,5 @@
 const templateMailForgotPassword = (resetUrl) => {
-  return `
+  const text = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -42,8 +42,9 @@ const templateMailForgotPassword = (resetUrl) => {
           <a href="${resetUrl}" class="button">Сбросить пароль</a>
         </div>
       </body>
-      </html>
-    `;
+      </html>`;
+
+  return text;
 };
 
 module.exports = templateMailForgotPassword;

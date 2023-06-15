@@ -9,7 +9,7 @@ const {
 } = require("../helpers");
 
 const bcrypt = require("bcrypt");
-const templateMailForgotPassword = require("../templates");
+const { templateMailForgotPassword } = require("../templates");
 
 const { FRONTEND_URL } = process.env;
 
